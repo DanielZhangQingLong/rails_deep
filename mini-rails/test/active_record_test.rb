@@ -1,6 +1,6 @@
 require "test_helper"
 
-require "active_record"
+#require "active_record"
 #require "muffin_blog/app/models/application_record"
 #require "muffin_blog/app/models/post"
 
@@ -8,10 +8,10 @@ require "active_record"
 class ActiveRecordTest < Minitest::Test
 
 
-  def setup
-    Post.establish_connection(
-      {database: "#{__dir__}/muffin_blog/db/development.sqlite3"})
-  end
+#  def setup
+#    Post.establish_connection(
+#      {database: "#{__dir__}/muffin_blog/db/development.sqlite3"})
+#  end
 
   def test_initialize
     post = Post.new(id: 1, title: "My first post")
