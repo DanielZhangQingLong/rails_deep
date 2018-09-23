@@ -11,6 +11,10 @@ class ActionControllerTest < Minitest::Test
       response << "show"
     end
 
+    def redirect
+      redirect_to "/"
+    end
+
     private
     def callback
       response << "callback"
@@ -43,6 +47,19 @@ class ActionControllerTest < Minitest::Test
     controller = PostsController.new
     controller.request = Request.new
     controller.process :show
+  end
+
+  class Response
+    attr_accessor :status, :location, :body
+  end
+
+  def test_redirect_to
+    controller = TestController.new
+    controller.response = Response.new
+    controller.process :redirect
+    assert_equal 302, controller.response.status
+    assert_equal "/", controller.response.location
+    assert_equal ["You are being redirected"], controller.response.body
   end
 
 end
