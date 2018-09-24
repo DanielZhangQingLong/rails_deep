@@ -1,3 +1,4 @@
+require "sprockets"
 module Rails
   autoload :Application, "rails/application"
   class Application
@@ -11,6 +12,10 @@ module Rails
       @instance
     end
 
+    def routes
+      @routes ||= ActionDispatch::Routing::RouteSet.new
+    end
+
     def initialize!
       #p caller
       config_environment_path = caller.first
@@ -18,10 +23,43 @@ module Rails
       ActiveSupport::Dependencies.autoload_paths = Dir["#{@root}/app/*"]
       ActiveRecord::Base.establish_connection(
         {database: "#{@root}/db/#{Rails.env}.sqlite3"})
+
+      load @root.join("config/routes.rb")
     end
 
     def root
       @root
     end
+
+    def default_middleware_stack
+      # equivalent config.ru 
+      Rack::Builder.new do
+        use Rack::ContentLength
+        use Rack::CommonLogger
+        use Rack::ShowExceptions
+        use Rack::Static, urls: ["/favicon.ico", "/robots.txt"],
+          root: Rails.root.join("public")
+
+        map "/assets" do
+          sprockets = Sprockets::Environment.new
+          sprockets.append_path Rails.root.join("app/assets/javascripts")
+          sprockets.append_path Rails.root.join("app/assets/stylesheets")
+          run sprockets
+        end
+      end
+    end
+
+    def app
+      @app ||= begin
+                 stack = default_middleware_stack
+                 stack.run routes
+                 stack.to_app
+               end
+    end
+
+    def call(env)
+      app.call(env)
+    end
+
   end
 end

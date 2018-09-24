@@ -44,6 +44,7 @@ class ActionControllerTest < Minitest::Test
   end
 
   def test_real_controller
+    puts PostsController.constants
     controller = PostsController.new
     controller.request = Request.new
     controller.process :show

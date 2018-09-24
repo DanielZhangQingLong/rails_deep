@@ -2,7 +2,7 @@ module ActionController
   class Metal
     attr_accessor :request, :response
 
-    def process(action)
+    def process action
       send action
     end
 

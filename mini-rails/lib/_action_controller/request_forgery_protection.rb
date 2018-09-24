@@ -6,7 +6,7 @@ module ActionController
 
     module ClassMethods
       def protect_from_forgery(options)
-        # Not implemented
+        # Not Implemented!
       end
     end
   end
