@@ -3,14 +3,14 @@ class PostsController < ApplicationController
 
   def index
     @posts = Post.all
-    puts response
-    response.write "<h1>The Muffin Blog</h1>"
-    @posts.each do |post|
-      response.write "<h2>#{post.title}</h2>"
-    end
+    #response.write "<h1>The Muffin Blog</h1>"
+    #@posts.each do |post|
+    #  response.write "<h2>#{post.title}</h2>"
+    #end
   end
 
   def show
+    #render :show
   end
 
   def new

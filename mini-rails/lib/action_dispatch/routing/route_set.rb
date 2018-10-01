@@ -49,6 +49,24 @@ module ActionDispatch
           [404, { 'Content-Type' => 'plain/text' }, ['Not found']]
         end
       end
+
+      def url_helpers
+        routes = @routes
+        Module.new do
+          routes.each do |route|
+            if route.name
+              define_method(route.name + "_path") do |params=nil|
+                if params
+                  route.path + "?" + Rack::Utils.build_query(params)
+                else
+                  route.path
+                end
+              end
+            end
+          end
+        end
+      end
+
     end
   end
 end
